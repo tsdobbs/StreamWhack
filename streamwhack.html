@@ -1,0 +1,76 @@
+<style>
+table {
+	width:100%;
+}
+td {
+	width:100px;
+	height: 300px;
+	text-align: center;
+}
+td a {
+	display:block;
+}
+</style>
+
+<table border=1>
+<tr>
+	<td id="title" class="trigger">
+		Get Title
+	</td>
+	<td id="is_live" class=trigger>
+		Live?
+	</td><td id="started_at", class="trigger">
+		Started At:
+	</td><td id="thumbnail_url", class="trigger">
+		Thumbnail
+	</td>
+</tr>
+<tr>
+	<td id="trigger5" class="trigger">
+		NULL
+	</td>
+	<td id="trigger6" class=trigger>
+		NULL
+	</td><td id="trigger7", class="trigger">
+		NULL
+	</td><td id="trigger8", class="trigger">
+		NULL
+	</td>
+</tr>
+</table>
+
+
+<script src="config.js"></script>
+
+<script>
+function myFunction(ele) {
+	var xhttp = new XMLHttpRequest();
+
+	//this is hardcoded to just use the Twitch channel info endpoint. Add other endpoints to do other things
+	xhttp.open('GET','https://api.twitch.tv/helix/search/channels?query=' + config.user, true);
+	xhttp.setRequestHeader("client-id", config.client_id)
+	xhttp.setRequestHeader("Authorization", config.user_auth)
+	xhttp.send();
+
+	xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+			var resp = JSON.parse(this.responseText);
+            ele.innerHTML =	resp.data[0][ele.id];
+			
+			ele.style.backgroundColor='white'
+	   } else {
+			ele.style.backgroundColor='yellow'
+	   }
+    };
+
+	
+}
+
+var elems = document.getElementsByClassName('trigger');
+for(var i = 0; i < elems.length; i++) {
+	elems[i].onclick = function() {myFunction(this)};
+	elems[i].onmousedown = function(){this.style.backgroundColor='gray'};
+}
+
+
+</script>
