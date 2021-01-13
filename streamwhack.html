@@ -6,6 +6,7 @@ td {
 	width:100px;
 	height: 300px;
 	text-align: center;
+	font-size: 200%;
 }
 td a {
 	display:block;
@@ -26,8 +27,8 @@ td a {
 	</td>
 </tr>
 <tr>
-	<td id="trigger5" class="trigger">
-		NULL
+	<td id="game_id" class="trigger">
+		Get Game
 	</td>
 	<td id="trigger6" class=trigger>
 		NULL
@@ -43,6 +44,30 @@ td a {
 <script src="config.js"></script>
 
 <script>
+
+function game_lookup(ele, game_id){
+	var xhttp = new XMLHttpRequest();
+
+	//this is hardcoded to just use the Twitch game lookup endpoint. Add other endpoints to do other things
+	xhttp.open('GET','https://api.twitch.tv/helix/games?id=' + game_id , true);
+	xhttp.setRequestHeader("client-id", config.client_id)
+	xhttp.setRequestHeader("Authorization", config.user_auth)
+	xhttp.send();
+
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var resp = JSON.parse(this.responseText);
+			payload = resp.data[0]
+			sized_box_art_url = payload.box_art_url.replace('{width}','200').replace('{height}','300')
+			console.log("Success: " + payload.name)
+			
+			ele.innerHTML =	payload.name + "<br><img src=" + sized_box_art_url + ">";
+			
+			ele.style.backgroundColor='white'
+		}
+	};
+}
+
 function myFunction(ele) {
 	var xhttp = new XMLHttpRequest();
 
@@ -55,9 +80,13 @@ function myFunction(ele) {
 	xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 			var resp = JSON.parse(this.responseText);
-            ele.innerHTML =	resp.data[0][ele.id];
+			if (ele.id == 'game_id'){
+				game_lookup(ele, resp.data[0][ele.id]);
+			} else {
+				ele.innerHTML =	resp.data[0][ele.id];
 			
-			ele.style.backgroundColor='white'
+				ele.style.backgroundColor='white'
+			}
 	   } else {
 			ele.style.backgroundColor='yellow'
 	   }
