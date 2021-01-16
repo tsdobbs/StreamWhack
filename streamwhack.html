@@ -1,12 +1,21 @@
 <style>
+body {
+	background-color: black;
+	}
+
 table {
 	width:100%;
+	border-collapse: collapse;
+	border: 1px solid black;
 }
 td {
 	width:100px;
 	height: 300px;
-	text-align: center;
+	text-align: left;
 	font-size: 200%;
+	background-color: black;
+	color: greenyellow;
+	font-family: "Lucida Console", "Courier New", monospace;
 }
 td a {
 	display:block;
@@ -15,28 +24,8 @@ td a {
 
 <table border=1>
 <tr>
-	<td id="title" class="trigger">
-		Get Title
-	</td>
-	<td id="is_live" class=trigger>
-		Live?
-	</td><td id="started_at", class="trigger">
-		Started At:
-	</td><td id="thumbnail_url", class="trigger">
-		Thumbnail
-	</td>
-</tr>
-<tr>
 	<td id="game_id" class="trigger">
 		Get Game
-	</td>
-	<td id="trigger6" class=trigger>
-		NULL
-	</td><td id="trigger7", class="trigger">
-		NULL
-	</td><td id="trigger8", class="trigger">
-		NULL
-	</td>
 </tr>
 </table>
 
@@ -61,9 +50,9 @@ function game_lookup(ele, game_id){
 			sized_box_art_url = payload.box_art_url.replace('{width}','200').replace('{height}','300')
 			console.log("Success: " + payload.name)
 			
-			ele.innerHTML =	payload.name + "<br><img src=" + sized_box_art_url + ">";
+			ele.innerHTML =	"Now Playing:<br>" + payload.name;
 			
-			ele.style.backgroundColor='white'
+			ele.style.backgroundColor='black'
 		}
 	};
 }
@@ -85,10 +74,10 @@ function myFunction(ele) {
 			} else {
 				ele.innerHTML =	resp.data[0][ele.id];
 			
-				ele.style.backgroundColor='white'
+				ele.style.backgroundColor='black'
 			}
 	   } else {
-			ele.style.backgroundColor='yellow'
+			ele.style.backgroundColor='gray'
 	   }
     };
 
@@ -98,7 +87,7 @@ function myFunction(ele) {
 var elems = document.getElementsByClassName('trigger');
 for(var i = 0; i < elems.length; i++) {
 	elems[i].onclick = function() {myFunction(this)};
-	elems[i].onmousedown = function(){this.style.backgroundColor='gray'};
+	elems[i].onmousedown = function(){this.style.backgroundColor='white'};
 }
 
 
